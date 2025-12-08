@@ -40,7 +40,7 @@ const Trash = () => {
 
   const { data, isLoading, refetch } = useGetAllTaskQuery({
     strQuery: "",
-    isTrashed: "true",
+    trash: "true",
     search: searchTerm,
   });
   const [deleteRestoreTask] = useDeleteRestoreTastMutation();

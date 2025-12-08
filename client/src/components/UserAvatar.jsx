@@ -18,6 +18,7 @@ const UserAvatar = () => {
   const [logoutUser] = useLogoutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const canEditProfile = user?.isAdmin || user?.role === "director";
 
   const logoutHandler = async () => {
     try {
@@ -53,17 +54,19 @@ const UserAvatar = () => {
           >
             <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-[#1f1f1f] shadow-2xl ring-1 ring-black/5 focus:outline-none'>
               <div className='p-4'>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={() => setOpen(true)}
-                      className={`text-gray-700 dark:text-gray-300  group flex w-full items-center rounded-md px-2 py-2 text-base`}
-                    >
-                      <FaUser className='mr-2' aria-hidden='true' />
-                      Hồ sơ
-                    </button>
-                  )}
-                </Menu.Item>
+                {canEditProfile && (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={() => setOpen(true)}
+                        className={`text-gray-700 dark:text-gray-300  group flex w-full items-center rounded-md px-2 py-2 text-base`}
+                      >
+                        <FaUser className='mr-2' aria-hidden='true' />
+                        Hồ sơ
+                      </button>
+                    )}
+                  </Menu.Item>
+                )}
 
                 <Menu.Item>
                   {({ active }) => (
@@ -94,7 +97,9 @@ const UserAvatar = () => {
         </Menu>
       </div>
 
-      <AddUser open={open} setOpen={setOpen} userData={user} />
+      {canEditProfile && (
+        <AddUser open={open} setOpen={setOpen} userData={user} />
+      )}
       <ChangePassword open={openPassword} setOpen={setOpenPassword} />
     </>
   );

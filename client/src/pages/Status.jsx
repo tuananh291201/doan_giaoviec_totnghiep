@@ -5,6 +5,9 @@ import { Loading, Title } from "../components";
 
 const StatusPage = () => {
   const { data, isLoading } = useGetUserTaskStatusQuery();
+  const filteredUsers = (data || []).filter(
+    (user) => (user?.role || "").toString().toLowerCase() !== "director"
+  );
 
   if (isLoading)
     <div className='py-10'>
@@ -80,7 +83,7 @@ const StatusPage = () => {
             <table className='w-full mb-5'>
               <TableHeader />
               <tbody>
-                {data?.map((user, index) => (
+                {filteredUsers.map((user, index) => (
                   <TableRow key={index} user={user} />
                 ))}
               </tbody>

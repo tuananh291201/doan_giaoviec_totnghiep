@@ -40,7 +40,7 @@ const linkData = [
     icon: <MdOutlinePendingActions />,
   },
   {
-    label: "Nhóm",
+    label: "Thành viên",
     link: "team",
     icon: <FaUsers />,
   },

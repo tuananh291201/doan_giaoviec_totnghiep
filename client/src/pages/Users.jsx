@@ -143,6 +143,10 @@ const Users = () => {
     </tr>
   );
 
+  const filteredUsers = (data || []).filter(
+    (u) => (u?.role || "").toString().toLowerCase() !== "director"
+  );
+
   return isLoading ? (
     <div className='py-10'>
       <Loading />
@@ -151,10 +155,10 @@ const Users = () => {
     <>
       <div className='w-full md:px-1 px-0 mb-6'>
         <div className='flex items-center justify-between mb-8'>
-          <Title title='Thành viên nhóm' />
+          <Title title='Chi tiết thành viên' />
 
           <Button
-            label='Thêm người dùng mới'
+            label='Thêm thành viên mới'
             icon={<IoMdAdd className='text-lg' />}
             className='flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5'
             onClick={() => setOpen(true)}
@@ -165,7 +169,7 @@ const Users = () => {
             <table className='w-full mb-5'>
               <TableHeader />
               <tbody>
-                {data?.map((user, index) => (
+                {filteredUsers.map((user, index) => (
                   <TableRow key={index} user={user} />
                 ))}
               </tbody>

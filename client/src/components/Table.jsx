@@ -62,7 +62,7 @@ const Table = ({ tasks }) => {
         <th className='py-2'>Độ ưu tiên</th>
         <th className='py-2 line-clamp-1'>Ngày tạo</th>
         <th className='py-2'>Tài nguyên</th>
-        <th className='py-2'>Nhóm</th>
+        <th className='py-2'>Thành viên</th>
       </tr>
     </thead>
   );

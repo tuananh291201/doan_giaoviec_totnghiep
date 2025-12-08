@@ -283,6 +283,7 @@ const updateTaskStage = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const { stage } = req.body;
+    const { userId, isAdmin } = req.user;
 
     const task = await Task.findById(id);
 
@@ -290,6 +291,12 @@ const updateTaskStage = asyncHandler(async (req, res) => {
       return res
         .status(404)
         .json({ status: false, message: "Không tìm thấy công việc." });
+    }
+
+    if (!isAdmin && !task.team.some((memberId) => memberId.equals(userId))) {
+      return res
+        .status(403)
+        .json({ status: false, message: "KhA'ng ?`?????c c??-p nh??-t cA'ng vi???c nA?y." });
     }
 
     task.stage = stage.toLowerCase();
@@ -311,10 +318,16 @@ const getTasks = asyncHandler(async (req, res) => {
   try {
     const { search, stage, priority, sortBy, page, limit, trash, date } =
       req.query;
+    const { userId, isAdmin } = req.user;
 
     let query = {
       isTrashed: trash === "true",
     };
+
+    // Nhân viên chỉ xem các task họ thuộc team
+    if (!isAdmin) {
+      query.team = userId;
+    }
 
     if (search) {
       query.title = { $regex: search, $options: "i" };
@@ -386,6 +399,7 @@ const getTasks = asyncHandler(async (req, res) => {
 const getTask = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId, isAdmin } = req.user;
 
     const task = await Task.findById(id)
       .populate({
@@ -401,6 +415,12 @@ const getTask = asyncHandler(async (req, res) => {
       return res
         .status(404)
         .json({ status: false, message: "Không tìm thấy công việc." });
+    }
+
+    if (!isAdmin && !task.team.some((member) => member._id.equals(userId))) {
+      return res
+        .status(403)
+        .json({ status: false, message: "KhA'ng Ž`’ø ¯œc truy cA­p cA'ng vi ¯Øc nAÿy." });
     }
 
     res.status(200).json({ status: true, task });
@@ -426,6 +446,12 @@ const postTaskActivity = asyncHandler(async (req, res) => {
       return res
         .status(404)
         .json({ status: false, message: "Không tìm thấy công việc." });
+    }
+
+    if (!isAdmin && !task.team.some((memberId) => memberId.equals(userId))) {
+      return res
+        .status(403)
+        .json({ status: false, message: "KhA'ng Ž`’ø ¯œc thA¦m ho §­t Ž` ¯Tng cho cA'ng vi ¯Øc nAÿy." });
     }
 
     // thêm activity mới vào công việc

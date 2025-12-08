@@ -27,7 +27,7 @@ const Tasks = () => {
 
   const { data, isLoading, refetch } = useGetAllTaskQuery({
     strQuery: status,
-    isTrashed: "",
+    trash: "",
     search: searchTerm,
   });
 

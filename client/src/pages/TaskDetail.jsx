@@ -291,10 +291,16 @@ const handleSubmit = async () => {
 
 const TaskDetail = () => {
   const { id } = useParams();
+  const { user } = useSelector((state) => state.auth);
   const { data, isLoading, refetch } = useGetSingleTaskQuery(id);
   const [selected, setSelected] = useState(0);
   const task = data?.task || [];
   const tabs = [...TABS, { title: "Trao đổi", icon: <MdOutlineMessage /> }];
+  const teamMembers = Array.isArray(task?.team) ? task.team : [];
+  const visibleTeam = teamMembers.filter((member) => {
+    const role = (member?.role || "").toString().toLowerCase();
+    return role !== "director";
+  });
 
   if (isLoading)
     return (
@@ -354,7 +360,7 @@ const TaskDetail = () => {
                     NHÓM CÔNG VIỆC
                   </p>
                   <div className="space-y-3">
-                    {task?.team?.map((m, index) => (
+                    {visibleTeam.map((m, index) => (
                       <div
                         key={index + m?._id}
                         className="flex gap-4 py-2 items-center border-t border-gray-200"

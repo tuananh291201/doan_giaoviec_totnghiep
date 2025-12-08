@@ -44,10 +44,11 @@ const Dashboard = () => {
 
   // Chuẩn hóa payload từ API (backend trả về data.summary)
   const summary = data?.summary || {};
-  const totals = summary?.tasks?.reduce(
-    (acc, item) => ({ ...acc, [item?.name]: item?.totalTasks }),
-    { todo: 0, "in progress": 0, completed: 0 }
-  );
+  const totals =
+    summary?.tasks?.reduce(
+      (acc, item) => ({ ...acc, [item?.name]: item?.totalTasks }),
+      { todo: 0, "in progress": 0, completed: 0 }
+    ) ?? { todo: 0, "in progress": 0, completed: 0 };
   const recentTasks = summary?.last10Task || [];
   const totalTasks = summary?.totalTasks || 0;
   const users = summary?.users || [];
@@ -177,7 +178,7 @@ const TaskTable = ({ tasks }) => {
       <tr className='text-black dark:text-white  text-left'>
         <th className='py-2'>Tiêu đề công việc</th>
         <th className='py-2'>Độ ưu tiên</th>
-        <th className='py-2'>Nhóm</th>
+        <th className='py-2'>Thành viên</th>
         <th className='py-2 hidden md:block'>Ngày tạo</th>
       </tr>
     </thead>
