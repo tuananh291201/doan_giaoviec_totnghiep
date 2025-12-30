@@ -105,7 +105,7 @@ const uploadTaskAssets = asyncHandler(async (req, res) => {
     if (!files.length) {
       return res
         .status(400)
-        .json({ status: false, message: "Khong co file duoc tai len." });
+        .json({ status: false, message: "Không có file tải lên." });
     }
 
     const urls = files.map((f) => {
@@ -115,7 +115,7 @@ const uploadTaskAssets = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
       status: true,
-      message: "Tai file thanh cong",
+      message: "Tải file thành công",
       urls,
     });
   } catch (error) {
@@ -296,7 +296,7 @@ const updateTaskStage = asyncHandler(async (req, res) => {
     if (!isAdmin && !task.team.some((memberId) => memberId.equals(userId))) {
       return res
         .status(403)
-        .json({ status: false, message: "KhA'ng ?`?????c c??-p nh??-t cA'ng vi???c nA?y." });
+        .json({ status: false, message: "Bạn không có quyền cập nhật công việc này." });
     }
 
     task.stage = stage.toLowerCase();
@@ -420,7 +420,7 @@ const getTask = asyncHandler(async (req, res) => {
     if (!isAdmin && !task.team.some((member) => member._id.equals(userId))) {
       return res
         .status(403)
-        .json({ status: false, message: "KhA'ng Ž`’ø ¯œc truy cA­p cA'ng vi ¯Øc nAÿy." });
+        .json({ status: false, message: "Không có quyền truy cập công việc này." });
     }
 
     res.status(200).json({ status: true, task });
@@ -451,7 +451,7 @@ const postTaskActivity = asyncHandler(async (req, res) => {
     if (!isAdmin && !task.team.some((memberId) => memberId.equals(userId))) {
       return res
         .status(403)
-        .json({ status: false, message: "KhA'ng Ž`’ø ¯œc thA¦m ho §­t Ž` ¯Tng cho cA'ng vi ¯Øc nAÿy." });
+        .json({ status: false, message: "Bạn không có quyền truy cập hoặc thao tác trên công việc này." });
     }
 
     // thêm activity mới vào công việc
@@ -513,7 +513,7 @@ const trashTask = asyncHandler(async (req, res) => {
     if (!task) {
       return res
         .status(404)
-        .json({ status: false, message: "Khong tim thay cong viec." });
+        .json({ status: false, message: "Không tìm thấy công việc." });
     }
 
     task.isTrashed = true;
@@ -522,7 +522,7 @@ const trashTask = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .json({ status: true, message: "Cong viec duoc chuyen den thung rac." });
+      .json({ status: true, message: "Công việc được chuyển đến thùng rác." });
   } catch (error) {
     return res
       .status(500)
@@ -538,21 +538,21 @@ const deleteRestoreTask = asyncHandler(async (req, res) => {
     if (!action) {
       return res
         .status(400)
-        .json({ status: false, message: "Thieu tham so hanh dong." });
+        .json({ status: false, message: "Thiếu tham số hành động." });
     }
 
     if (action === "deleteAll") {
       await Task.deleteMany({ isTrashed: true });
       return res
         .status(200)
-        .json({ status: true, message: "Da xoa tat ca cong viec trong thung rac." });
+        .json({ status: true, message: "Đã xóa tất cả trong thùng rác." });
     }
 
     if (action === "restoreAll") {
       await Task.updateMany({ isTrashed: true }, { isTrashed: false });
       return res
         .status(200)
-        .json({ status: true, message: "Da khoi phuc tat ca cong viec." });
+        .json({ status: true, message: "Đã khôi phục công việc." });
     }
 
     const task = await Task.findById(id);
@@ -560,14 +560,14 @@ const deleteRestoreTask = asyncHandler(async (req, res) => {
     if (!task) {
       return res
         .status(404)
-        .json({ status: false, message: "Khong tim thay cong viec." });
+        .json({ status: false, message: "Không tìm thấy công việc." });
     }
 
     if (action === "delete") {
       await Task.findByIdAndDelete(id);
       return res
         .status(200)
-        .json({ status: true, message: "Da xoa cong viec." });
+        .json({ status: true, message: "Đã xóa công việc." });
     }
 
     if (action === "restore") {
@@ -575,12 +575,12 @@ const deleteRestoreTask = asyncHandler(async (req, res) => {
       await task.save();
       return res
         .status(200)
-        .json({ status: true, message: "Da khoi phuc cong viec." });
+        .json({ status: true, message: "Đã khôi phục công việc." });
     }
 
     return res
       .status(400)
-      .json({ status: false, message: "Hanh dong khong hop le." });
+      .json({ status: false, message: "Hành động không hợp lệ." });
   } catch (error) {
     return res
       .status(500)

@@ -1,13 +1,13 @@
-// server/routes/index.js
-import express from "express";
-import userRoutes from "./userRoute.js";
-import taskRoutes from "./taskRoute.js";
-import reportRoutes from "./reportRoute.js"; // 👈 thêm dòng này
+// server/routes/index.js - Tập hợp tất cả các routes của ứng dụng
+import express from "express"; // Import thư viện Express để tạo router
+import userRoutes from "./userRoute.js"; // Import routes liên quan đến người dùng (user)
+import taskRoutes from "./taskRoute.js"; // Import routes liên quan đến công việc (task)
+import reportRoutes from "./reportRoute.js"; // Import routes liên quan đến báo cáo (report)
 
-const router = express.Router();
+const router = express.Router(); // Tạo một instance của Express Router để quản lý các routes
 
-router.use("/user", userRoutes);
-router.use("/task", taskRoutes);
-router.use("/reports", reportRoutes); // 👈 thêm dòng này
+router.use("/user", userRoutes); // Sử dụng userRoutes cho các endpoint bắt đầu bằng /user
+router.use("/task", taskRoutes); // Sử dụng taskRoutes cho các endpoint bắt đầu bằng /task
+router.use("/reports", reportRoutes); // Sử dụng reportRoutes cho các endpoint bắt đầu bằng /reports
 
-export default router;
+export default router; // Xuất router để sử dụng trong file chính của server
